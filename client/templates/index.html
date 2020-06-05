@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Random chat</title>
+    <link rel="stylesheet" href="static/style/style.css">
+    
+</head>
+<body>
+    <div class="div-title">
+        <h1>P2P random chat!</h1>
+    </div>
+
+    <div class="div-connection">
+        <input placeholder="name" id="input-name">
+        <button id="start-btn" disabled>
+            Start random chat!
+        </button>
+    </div>
+
+    <div class="div-loading">
+        <h3 hidden id="h3-loading">Loading...</h3>
+    </div>
+
+    <div class="div-chat">
+    <textarea id="chat-tarea" rows="10" disabled>
+
+    </textarea>
+    </div>
+
+    <div class="div-input">
+        <input type="text" id="input-text" disabled="disabled">
+        <button id="send-btn" disabled>Send</button>
+    </div>
+
+    <script src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"></script>
+    <!--  <script src="js/peer.min.js"></script>  -->
+    <script src="static/js/main.js" type="module"></script>
+</body>
+</html>

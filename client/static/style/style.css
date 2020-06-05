@@ -1,0 +1,41 @@
+.div-title {
+    display: block;
+    position: relative;    
+}
+
+.div-title h1 {
+    text-align: center;
+}
+
+.div-connection {
+    display: block;
+    position: relative;
+    text-align: center;
+}
+
+.div-connection button {
+
+}
+
+.div-loading {
+    text-align: center;
+}
+
+
+.div-chat {
+    display: block;
+    position: relative;
+}
+
+.div-chat textarea {
+    display: block;
+    width: 100%;
+    color: black;
+}
+
+.div-input {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
