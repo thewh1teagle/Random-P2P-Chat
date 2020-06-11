@@ -15,7 +15,6 @@ export default class PoolClient {
     }
   
     async random_peer() {
-      console.log(`this.peerid = ${this.peer_id}`)
       let response = await fetch(`http://${this.HOST}:${this.PORT}/random?id=${this.peer_id}`)
       response = response.json()
       return response
