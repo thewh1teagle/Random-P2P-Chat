@@ -114,8 +114,23 @@ send_btn.addEventListener("click", (e) => {
 
 
 
+chat_input.addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+      send_btn.click()
+  }
+});
+
+name_input.addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    start_btn.click();
+  }
+})
+
+
 function send_message(message) {
   text_area.value = text_area.value  + "\n" + "sended: " + message
+  chat_input.focus()
+  chat_input.value = ""
   conn.send(message)
 }
 
