@@ -13,6 +13,13 @@ export default class PoolClient {
         res = res.json()
         return res
     }
+
+    async remove_peer(peer_id) {
+      console.log(`removing ${peer_id}`)
+      let res = await fetch(`http://${this.HOST}:${this.PORT}/remove?id=${peer_id}`)
+      res = res.json()
+      return res
+    }
   
     async random_peer() {
       let response = await fetch(`http://${this.HOST}:${this.PORT}/random?id=${this.peer_id}`)

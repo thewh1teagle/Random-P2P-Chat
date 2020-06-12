@@ -1,12 +1,13 @@
 import PoolClient from './poolClient.js'
 var HOST = "localhost"
-var PORT = 8080
+var PORT = 8000
 
 
 var poolClient = null
 var peer = null
 var conn = null
 var lastPeerId = null
+var lastConnectedPeerId = null
 
 var connect_btn = document.getElementById("start-btn")
 var name_input = document.getElementById("input-name")
@@ -30,6 +31,7 @@ peer = new Peer({
 
 
 peer.on('open', function(id) {
+  lastPeerId = id
   console.log('My peer ID is: ' + id);
 });
 
@@ -66,9 +68,20 @@ start_btn.addEventListener("click", async function(e) {
     var random_peer_name = result['peer']['name']
     console.log(`connecting to ${random_peer_id}`)
     conn = peer.connect(random_peer_id)
+
+
+    lastConnectedPeerId = conn.peer
+
     console.log("connected to other peer!")
     h3_loading.hidden = true
     chat_input.disabled = false
+
+    conn.on('close', function() {
+      poolClient.remove_peer(lastPeerId)
+      poolClient.remove_peer(lastConnectedPeerId)
+      console.log("Disconnected from other peer")
+    })
+    
 
     conn.on('data', function(data) {
       console.log('Received', data)
@@ -78,8 +91,18 @@ start_btn.addEventListener("click", async function(e) {
 });
 
  
-    
 peer.on('connection', function(dataConnection) {
+  dataConnection.on('close', function() {
+    poolClient.remove_peer(lastPeerId)
+    poolClient.remove_peer(lastConnectedPeerId)
+    console.log("Disconnected from other peer")
+  })
+});
+
+
+peer.on('connection', function(dataConnection) {
+  lastConnectedPeerId = dataConnection.peer
+
   console.log("connected to other peer!")
   conn = dataConnection
   h3_loading.hidden = true
