@@ -1,13 +1,13 @@
 import PoolClient from './poolClient.js'
-var HOST = "localhost"
-var PORT = 8000
 
 
-var poolClient = null
-var peer = null
+
 var conn = null
 var lastPeerId = null
 var lastConnectedPeerId = null
+var lastPeerName = null
+var lastName = null
+
 
 var connect_btn = document.getElementById("start-btn")
 var name_input = document.getElementById("input-name")
@@ -19,10 +19,8 @@ var text_area = document.getElementById("chat-tarea")
 
 
 
-
-poolClient = new PoolClient(HOST, PORT)
-
-peer = new Peer({
+var poolClient = new PoolClient("localhost", 8000)
+var peer = new Peer({
   host: 'localhost',
   port: 9000,
   path: '/myapp'
@@ -55,7 +53,10 @@ name_input.addEventListener('input', function (e) {
 
 
 
-start_btn.addEventListener("click", async function(e) {
+
+
+const start = async function(e) {
+  lastName = name_input.value
   await poolClient.register(name_input.value, peer._id)
   h3_loading.hidden = false
   var result = await poolClient.random_peer()
@@ -65,7 +66,8 @@ start_btn.addEventListener("click", async function(e) {
   } 
   else {
     var random_peer_id = result['peer']['peer_id']
-    var random_peer_name = result['peer']['name']
+    var random_peer_name = result['peer']['peer_name']
+    lastPeerName = random_peer_name
     console.log(`connecting to ${random_peer_id}`)
     conn = peer.connect(random_peer_id)
 
@@ -88,10 +90,15 @@ start_btn.addEventListener("click", async function(e) {
       update_message(data)
     });
   }
-});
+}
+
+
+
+start_btn.addEventListener("click", start);
 
  
 peer.on('connection', function(dataConnection) {
+  lastName = name_input.value
   dataConnection.on('close', function() {
     poolClient.remove_peer(lastPeerId)
     poolClient.remove_peer(lastConnectedPeerId)
@@ -151,13 +158,15 @@ name_input.addEventListener("keyup", function(event) {
 
 
 function send_message(message) {
-  text_area.value = text_area.value  + "\n" + "sended: " + message
+  text_area.value = text_area.value  + "\n" + lastName + ": " + message + "\n"
+  text_area.scrollTop = text_area.scrollHeight
   chat_input.focus()
   chat_input.value = ""
   conn.send(message)
 }
 
 function update_message(message) {
-  text_area.value = text_area.value  + "\n" + "received: " + message
+  text_area.value = text_area.value  + "\n" + lastPeerName + ": " + message + "\n"
+  
 }
 
